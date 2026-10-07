@@ -4,6 +4,57 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Best Sellers</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Poppins:wght@400;500;600&family=Source+Serif+4:opsz,wght@8..60,700;8..60,900&display=swap"
+      rel="stylesheet"
+    />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: {
+              sans: ["Poppins", "ui-sans-serif", "system-ui", "sans-serif"],
+              serif: ['"Source Serif 4"', "Georgia", "serif"],
+              bebas: ['"Bebas Neue"', "Impact", "sans-serif"],
+            },
+          },
+        },
+      };
+    </script>
   </head>
-  <body></body>
+  <body class="bg-white font-sans text-[#1c1d1d] antialiased">
+    <main>
+      <section class="px-6 py-9 lg:px-32 lg:pb-[100px] lg:pt-20" aria-labelledby="best-sellers-heading">
+        <div class="flex flex-col gap-6 lg:gap-9">
+          <div class="flex items-center justify-between">
+            <h1
+              id="best-sellers-heading"
+              class="w-full text-center font-serif text-[28px] font-bold leading-[1.26] tracking-[-0.28px] text-[#231f20] lg:w-auto lg:text-left lg:text-[40px] lg:font-black lg:leading-[1.2] lg:tracking-[-0.4px]"
+            >
+              Best Sellers
+            </h1>
+            <a
+              href="#all-best-sellers"
+              class="hidden shrink-0 items-center gap-2 rounded-full px-8 py-4 font-sans text-[14px] font-semibold leading-[1.4] tracking-[0.42px] text-[#5c553a] lg:inline-flex"
+            >
+              Shop All Best Sellers
+              <img src="assets/arrow.svg" alt="" width="20" height="20" />
+            </a>
+          </div>
+
+          <div class="min-w-0 w-full">
+            <div id="product-scroller" class="product-scroller" tabindex="0" aria-label="Best seller products">
+              <div class="product-row">
+                <ul id="product-grid" class="product-grid"></ul>
+                <div id="more-products"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </body>
 </html>
