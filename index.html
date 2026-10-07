@@ -54,6 +54,10 @@
         padding-top: 12px;
       }
 
+      .scrollbar-track {
+        display: none;
+      }
+
       @media (min-width: 1024px) {
         .product-scroller {
           width: calc(100% + 8rem);
@@ -68,9 +72,13 @@
           cursor: grab;
         }
 
-        .product-scroller.is-dragging {
+        .product-scroller.is-dragging,
+        .product-scroller:has(+ .scrollbar-track.is-touching) {
           scroll-snap-type: none;
           scroll-behavior: auto;
+        }
+
+        .product-scroller.is-dragging {
           cursor: grabbing;
           user-select: none;
         }
@@ -106,10 +114,38 @@
         .more-grid {
           padding-top: 0;
         }
+
+        .scrollbar-track.is-ready {
+          position: relative;
+          display: block;
+          height: 4px;
+          margin-top: 48px;
+          border-radius: 999px;
+          background: #ddd6d7;
+          cursor: pointer;
+          touch-action: none;
+        }
+
+        .scrollbar-thumb {
+          position: absolute;
+          top: 0;
+          left: 0;
+          height: 4px;
+          border-radius: 999px;
+          background: #231f20;
+          transition: height 180ms ease, top 180ms ease;
+        }
+
+        .scrollbar-track:hover .scrollbar-thumb,
+        .scrollbar-track.is-touching .scrollbar-thumb {
+          top: -1px;
+          height: 6px;
+        }
       }
 
       @media (prefers-reduced-motion: reduce) {
         .more-batch,
+        .scrollbar-thumb,
         .product-image {
           transition: none;
         }
@@ -146,6 +182,10 @@
                 <ul id="product-grid" class="product-grid"></ul>
                 <div id="more-products"></div>
               </div>
+            </div>
+
+            <div id="scrollbar-track" class="scrollbar-track" aria-hidden="true">
+              <div id="scrollbar-thumb" class="scrollbar-thumb"></div>
             </div>
           </div>
         </div>
