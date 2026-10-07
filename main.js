@@ -80,11 +80,13 @@ function renderProducts() {
 
   document.querySelector("#product-grid").replaceChildren(...preview.map(createCard));
   moreProducts.replaceChildren(...batches);
+  scroller.querySelectorAll(".product-card").item(products.length - 1)?.classList.add("is-last");
   showMoreButton.hidden = batches.length === 0;
 }
 
 const showMoreButton = document.querySelector("#show-more");
 const moreProducts = document.querySelector("#more-products");
+const scroller = document.querySelector("#product-scroller");
 const mobileQuery = window.matchMedia("(max-width: 1023px)");
 
 function moreBatches() {
@@ -123,3 +125,62 @@ showMoreButton.addEventListener("click", () => {
 
 syncMoreAccess();
 mobileQuery.addEventListener("change", syncMoreAccess);
+
+let imageDragStartX = 0;
+let imageDragStartScroll = 0;
+let imageDragging = false;
+let imageDragMoved = false;
+
+scroller.addEventListener("pointerdown", (event) => {
+  if (mobileQuery.matches || event.button !== 0 || !event.target.closest(".product-card")) {
+    return;
+  }
+
+  imageDragging = true;
+  imageDragMoved = false;
+  imageDragStartX = event.clientX;
+  imageDragStartScroll = scroller.scrollLeft;
+  scroller.setPointerCapture(event.pointerId);
+});
+
+scroller.addEventListener("pointermove", (event) => {
+  if (!imageDragging) {
+    return;
+  }
+
+  const delta = event.clientX - imageDragStartX;
+
+  if (Math.abs(delta) > 6) {
+    imageDragMoved = true;
+    scroller.classList.add("is-dragging");
+  }
+
+  if (imageDragMoved) {
+    scroller.scrollLeft = imageDragStartScroll - delta;
+  }
+});
+
+function endImageDrag() {
+  if (!imageDragging) {
+    return;
+  }
+
+  imageDragging = false;
+  scroller.classList.remove("is-dragging");
+}
+
+scroller.addEventListener("pointerup", endImageDrag);
+scroller.addEventListener("pointercancel", endImageDrag);
+scroller.addEventListener(
+  "click",
+  (event) => {
+    if (!imageDragMoved) {
+      return;
+    }
+
+    event.preventDefault();
+    event.stopPropagation();
+    imageDragMoved = false;
+  },
+  true
+);
