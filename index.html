@@ -55,10 +55,52 @@
       }
 
       @media (min-width: 1024px) {
+        .product-scroller {
+          width: calc(100% + 8rem);
+          max-width: none;
+          margin-right: -8rem;
+          overflow-x: auto;
+          scroll-snap-type: x mandatory;
+          scroll-behavior: smooth;
+          scroll-padding-inline: 0 8rem;
+          overscroll-behavior-x: contain;
+          scrollbar-width: none;
+          cursor: grab;
+        }
+
+        .product-scroller.is-dragging {
+          scroll-snap-type: none;
+          scroll-behavior: auto;
+          cursor: grabbing;
+          user-select: none;
+        }
+
+        .product-scroller::-webkit-scrollbar {
+          display: none;
+        }
+
+        .product-row {
+          display: flex;
+          gap: 24px;
+          width: max-content;
+          padding-inline-end: 8rem;
+        }
+
+        .product-grid,
         #more-products,
         .more-batch,
         .more-clip {
           display: contents;
+        }
+
+        .product-card {
+          flex: 0 0 355px;
+          width: 355px;
+          scroll-snap-align: start;
+        }
+
+        .product-card.is-last {
+          scroll-snap-align: end;
         }
 
         .more-grid {
@@ -67,8 +109,13 @@
       }
 
       @media (prefers-reduced-motion: reduce) {
-        .more-batch {
+        .more-batch,
+        .product-image {
           transition: none;
+        }
+
+        .product-scroller {
+          scroll-behavior: auto;
         }
       }
     </style>
