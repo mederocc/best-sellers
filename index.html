@@ -34,6 +34,43 @@
         padding: 0;
         list-style: none;
       }
+
+      .more-batch {
+        display: grid;
+        grid-template-rows: 0fr;
+        transition: grid-template-rows 480ms ease;
+      }
+
+      .more-batch.is-open {
+        grid-template-rows: 1fr;
+      }
+
+      .more-clip {
+        min-height: 0;
+        overflow: hidden;
+      }
+
+      .more-grid {
+        padding-top: 12px;
+      }
+
+      @media (min-width: 1024px) {
+        #more-products,
+        .more-batch,
+        .more-clip {
+          display: contents;
+        }
+
+        .more-grid {
+          padding-top: 0;
+        }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        .more-batch {
+          transition: none;
+        }
+      }
     </style>
   </head>
   <body class="bg-white font-sans text-[#1c1d1d] antialiased">
@@ -65,6 +102,16 @@
             </div>
           </div>
         </div>
+
+        <button
+          id="show-more"
+          type="button"
+          class="mt-3 flex h-[54px] w-full items-center justify-center rounded-full bg-[#1c1d1d] px-6 font-sans text-[16px] font-semibold leading-[1.4] tracking-[0.48px] text-[#fffffa] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#231f20] lg:hidden"
+          aria-expanded="false"
+          aria-controls="more-products"
+        >
+          Show More
+        </button>
       </section>
     </main>
     <template id="product-card">
