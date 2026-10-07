@@ -31,7 +31,7 @@ export const products = [
     image: "https://images.unsplash.com/photo-1583743814966-8936f5b7be1a?auto=format&fit=crop&w=900&h=900&q=80",
     imageAlt: "Black t-shirt",
     hoverImage: "https://images.unsplash.com/photo-1549298916-b41d501d3772?auto=format&fit=crop&w=900&h=900&q=80",
-    badges: [{ type: "bestseller" }, { type: "sale", show: "mobile" }],
+    badges: [{ type: "bestseller" }, { type: "sale" }],
   },
   {
     slug: "outside-vibes-cap-forest-green",
@@ -42,7 +42,7 @@ export const products = [
     image: "https://images.unsplash.com/photo-1588850561407-ed78c282e89b?auto=format&fit=crop&w=900&h=900&q=80",
     imageAlt: "Baseball cap",
     hoverImage: "https://images.unsplash.com/photo-1571771894821-ce9b6c11b08e?auto=format&fit=crop&w=900&h=900&q=80",
-    badges: [{ type: "bestseller" }, { type: "sale", show: "desktop" }],
+    badges: [{ type: "bestseller" }, { type: "sale" }],
   },
   {
     slug: "rest-in-nature-t-shirt-charcoal-car",

@@ -14,16 +14,6 @@ function applyBadges(card, badges) {
 
   if (!saleBadge) {
     sale.remove();
-    return;
-  }
-
-  if (saleBadge.show === "mobile") {
-    sale.classList.add("lg:hidden");
-  }
-
-  if (saleBadge.show === "desktop") {
-    sale.classList.remove("inline-flex");
-    sale.classList.add("hidden", "lg:inline-flex");
   }
 }
 
