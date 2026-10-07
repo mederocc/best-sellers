@@ -143,6 +143,32 @@
         }
       }
 
+      [data-hover-image] {
+        opacity: 0;
+      }
+
+      .group:hover [data-image],
+      .group:focus-visible [data-image] {
+        opacity: 0;
+      }
+
+      .group:hover [data-hover-image],
+      .group:focus-visible [data-hover-image] {
+        opacity: 1;
+      }
+
+      @media (prefers-reduced-motion: no-preference) {
+        .product-image {
+          transition: opacity 300ms;
+        }
+
+        @starting-style {
+          [data-hover-image] {
+            opacity: 0;
+          }
+        }
+      }
+
       @media (prefers-reduced-motion: reduce) {
         .more-batch,
         .scrollbar-thumb,
@@ -206,8 +232,8 @@
         <article class="flex flex-col gap-2 pb-2 lg:pb-4">
           <a data-product-link class="group block rounded-[10px] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#231f20]">
             <div class="relative aspect-square overflow-hidden rounded-[10px] lg:size-[355px]">
-              <img data-image class="product-image absolute inset-0 h-full w-full object-cover transition-opacity duration-300 group-hover:opacity-0 group-focus-visible:opacity-0" alt="" width="900" height="900" />
-              <img data-hover-image class="product-image absolute inset-0 h-full w-full object-cover opacity-0 transition-opacity duration-300 group-hover:opacity-100 group-focus-visible:opacity-100" alt="" width="900" height="900" aria-hidden="true" />
+              <img data-image class="product-image absolute inset-0 h-full w-full object-cover" alt="" width="900" height="900" />
+              <img data-hover-image class="product-image absolute inset-0 h-full w-full object-cover" alt="" width="900" height="900" aria-hidden="true" />
               <div class="absolute inset-x-1 top-1 flex items-start justify-between lg:inset-x-2 lg:top-2">
                 <span data-badge="bestseller" class="inline-flex rounded-full border border-black bg-white px-2 py-1 font-bebas text-[8px] leading-none tracking-[0.32px] text-black lg:text-[10px] lg:tracking-[0.6px]">BEST SELLER</span>
                 <span data-badge="sale" class="inline-flex rounded-full border border-black bg-[#5c7962] px-2 py-1 font-bebas text-[8px] leading-none tracking-[0.32px] text-[#fffffa] lg:text-[10px] lg:tracking-[0.6px]">SAVE 15%</span>
