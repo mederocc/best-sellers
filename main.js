@@ -1,5 +1,6 @@
 import { products } from "./products.js";
 
+const previewCount = 4;
 const cardTemplate = document.querySelector("#product-card");
 
 function applyBadges(card, badges) {
@@ -64,8 +65,6 @@ function createCard(product) {
   return card;
 }
 
-const previewCount = 4;
-
 function createBatch(items) {
   const batch = document.createElement("div");
   const clip = document.createElement("div");
@@ -97,6 +96,8 @@ function renderProducts() {
 const showMoreButton = document.querySelector("#show-more");
 const moreProducts = document.querySelector("#more-products");
 const scroller = document.querySelector("#product-scroller");
+const track = document.querySelector("#scrollbar-track");
+const thumb = document.querySelector("#scrollbar-thumb");
 const mobileQuery = window.matchMedia("(max-width: 1023px)");
 
 function moreBatches() {
@@ -135,6 +136,85 @@ showMoreButton.addEventListener("click", () => {
 
 syncMoreAccess();
 mobileQuery.addEventListener("change", syncMoreAccess);
+
+function updateThumb() {
+  const { scrollWidth, clientWidth, scrollLeft } = scroller;
+  const maxScroll = scrollWidth - clientWidth;
+
+  if (maxScroll <= 0) {
+    thumb.style.width = "0px";
+    return;
+  }
+
+  const thumbWidth = Math.max((clientWidth / scrollWidth) * track.clientWidth, 48);
+  const maxOffset = track.clientWidth - thumbWidth;
+  const offset = (scrollLeft / maxScroll) * maxOffset;
+
+  thumb.style.width = `${thumbWidth}px`;
+  thumb.style.transform = `translateX(${offset}px)`;
+}
+
+scroller.classList.add("has-custom-scrollbar");
+track.classList.add("is-ready");
+updateThumb();
+
+scroller.addEventListener("scroll", updateThumb, { passive: true });
+window.addEventListener("resize", updateThumb);
+
+let dragOriginX = 0;
+let dragOriginScroll = 0;
+let dragging = false;
+
+function scrollFromPointer(clientX) {
+  const maxScroll = scroller.scrollWidth - scroller.clientWidth;
+  const thumbWidth = thumb.getBoundingClientRect().width;
+  const maxOffset = track.clientWidth - thumbWidth;
+
+  if (maxOffset <= 0 || maxScroll <= 0) {
+    return;
+  }
+
+  const delta = clientX - dragOriginX;
+  const next = dragOriginScroll + (delta / maxOffset) * maxScroll;
+  scroller.scrollLeft = Math.min(Math.max(next, 0), maxScroll);
+}
+
+track.addEventListener("pointerdown", (event) => {
+  if (window.matchMedia("(max-width: 1023px)").matches) {
+    return;
+  }
+
+  track.classList.add("is-touching");
+  dragging = true;
+  dragOriginX = event.clientX;
+  dragOriginScroll = scroller.scrollLeft;
+  track.setPointerCapture(event.pointerId);
+
+  if (event.target !== thumb) {
+    const rect = track.getBoundingClientRect();
+    const thumbWidth = thumb.getBoundingClientRect().width;
+    const maxOffset = rect.width - thumbWidth;
+    const maxScroll = scroller.scrollWidth - scroller.clientWidth;
+    const clickOffset = event.clientX - rect.left - thumbWidth / 2;
+    const ratio = maxOffset <= 0 ? 0 : clickOffset / maxOffset;
+    scroller.scrollLeft = Math.min(Math.max(ratio, 0), 1) * maxScroll;
+    dragOriginX = event.clientX;
+    dragOriginScroll = scroller.scrollLeft;
+  }
+});
+
+track.addEventListener("pointermove", (event) => {
+  if (!dragging) {
+    return;
+  }
+
+  scrollFromPointer(event.clientX);
+});
+
+function endDrag() {
+  dragging = false;
+  track.classList.remove("is-touching");
+}
 
 let imageDragStartX = 0;
 let imageDragStartScroll = 0;
@@ -194,3 +274,6 @@ scroller.addEventListener(
   },
   true
 );
+
+track.addEventListener("pointerup", endDrag);
+track.addEventListener("pointercancel", endDrag);
