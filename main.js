@@ -64,4 +64,72 @@ function createCard(product) {
   return card;
 }
 
-document.querySelector("#product-grid").replaceChildren(...products.map(createCard));
+const previewCount = 4;
+
+function createBatch(items) {
+  const batch = document.createElement("div");
+  const clip = document.createElement("div");
+  const list = document.createElement("ul");
+  batch.className = "more-batch";
+  clip.className = "more-clip";
+  list.className = "product-grid more-grid";
+  list.append(...items.map(createCard));
+  clip.append(list);
+  batch.append(clip);
+  return batch;
+}
+
+function renderProducts() {
+  const preview = products.slice(0, previewCount);
+  const rest = products.slice(previewCount);
+  const batches = [];
+
+  for (let index = 0; index < rest.length; index += previewCount) {
+    batches.push(createBatch(rest.slice(index, index + previewCount)));
+  }
+
+  document.querySelector("#product-grid").replaceChildren(...preview.map(createCard));
+  moreProducts.replaceChildren(...batches);
+  showMoreButton.hidden = batches.length === 0;
+}
+
+const showMoreButton = document.querySelector("#show-more");
+const moreProducts = document.querySelector("#more-products");
+const mobileQuery = window.matchMedia("(max-width: 1023px)");
+
+function moreBatches() {
+  return [...moreProducts.querySelectorAll(".more-batch")];
+}
+
+function syncMoreAccess() {
+  const batches = moreBatches();
+  const anyOpen = batches.some((batch) => batch.classList.contains("is-open"));
+  const anyClosed = batches.some((batch) => !batch.classList.contains("is-open"));
+
+  batches.forEach((batch) => {
+    const hidden = mobileQuery.matches && !batch.classList.contains("is-open");
+    batch.toggleAttribute("inert", hidden);
+    batch.setAttribute("aria-hidden", hidden ? "true" : "false");
+  });
+
+  showMoreButton.textContent = anyClosed ? "Show More" : "Show Less";
+  showMoreButton.setAttribute("aria-expanded", String(anyOpen));
+}
+
+renderProducts();
+
+showMoreButton.addEventListener("click", () => {
+  const batches = moreBatches();
+  const nextBatch = batches.find((batch) => !batch.classList.contains("is-open"));
+
+  if (nextBatch) {
+    nextBatch.classList.add("is-open");
+  } else {
+    batches.forEach((batch) => batch.classList.remove("is-open"));
+  }
+
+  syncMoreAccess();
+});
+
+syncMoreAccess();
+mobileQuery.addEventListener("change", syncMoreAccess);
